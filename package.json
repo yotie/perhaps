@@ -1,0 +1,37 @@
+{
+  "name": "@yotie/perhaps",
+  "version": "1.0.0",
+  "description": "",
+  "source": "src/index.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**"
+  ],
+  "scripts": {
+    "prebuild": "rm -rf ./dist",
+    "build": "microbundle -o dist/index.js -f cjs,modern --target node --raw",
+    "postbuild": "rm -rf .rts2_*",
+    "dev": "microbundle --target node watch",
+    "test": "jest --verbose",
+    "prepublish": "yarn build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yotie/perhaps.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "author": "Ashley Narcisse",
+  "license": "MIT",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.10.2",
+    "@babel/preset-typescript": "^7.9.0",
+    "@types/jest": "^25.2.1",
+    "jest": "^25.5.2",
+    "microbundle": "next"
+  }
+}
