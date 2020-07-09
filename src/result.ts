@@ -34,9 +34,14 @@ export function result<T>(value: Error): Result<T>;
 export function result<T>(value: T): Result<T> 
 export function result(): Result<void>;
 
-export function result<T>(value?: T | Maybe<T> | Error): Result<T> {
+export function result<T>(value?: T | Maybe<T> | Maybe<null> | Error): Result<T> {
   if (value instanceof Error) return Result.Fail<T>(value as Error);
   if (value instanceof Maybe) return (value as Maybe<T>).toResult();
+  if (value instanceof Result) {
+    console.log('getting result', value.toJSON());
+    return value;
+  }
+
   return Result.Ok<T>(value as T);
 }
 
@@ -171,6 +176,10 @@ export interface ResultHandler {
   (value?: Maybe<any> | Error): any | Result<any>
 };
 
+export interface AsyncResultHandler {
+  (value?: Maybe<any> | Error): Promise<any> | Promise<Result<any>>
+};
+
 export class Result<T> extends Outcome<T> {
   [Symbol.toStringTag] = `Result: ${this.status.toUpperCase()}`;
 
@@ -232,16 +241,16 @@ export class Result<T> extends Outcome<T> {
 
   static wrap<T>(fn: Function): Result<T> {
     try {
-      return Success<T>(fn());
+      return result(fn());
     } catch (error) {
       return Failure<T>(error);
     }
   }
 
-  static async wrapAsync<T>(fn: Function | Promise<any>): Promise<Result<T>> {
+  static async wrapAsync<T>(fn: AsyncResultHandler | Promise<any>): Promise<Result<T>> {
     try {
       const val = (fn instanceof Promise) ? fn : fn()
-      return  Success<T>(await val);
+      return result(await val);
     } catch (error) {
       return Failure<T>(error);
     }

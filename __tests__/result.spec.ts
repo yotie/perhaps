@@ -1,6 +1,5 @@
-import { ResultStatus, asyncResult, result, Result, Failure } from '../src/result';
-import { Some, None } from '../src/option';
-import { json } from 'micro';
+import { ResultStatus, asyncResult, result, Result, Failure, Success } from '../src/result';
+import { Some, None, Maybe } from '../src/option';
 
 describe(result, () => {
   test(`creates a success result`, () => {
@@ -64,6 +63,24 @@ describe(asyncResult, () => {
   });
 });
 
+describe('Success', () => {
+  it('should return a successful result', () => {
+    const res = Success(10);
+
+    expect(res.ok).toBe(true);
+    expect(res.value.value).toBe(10);
+  })
+});
+
+describe('Failure', () => {
+  it('should return a failure result', () => {
+    const res = Failure('test');
+
+    expect(res.ok).toBe(false);
+    expect(res.reason.message).toBe('test');
+  });
+});
+
 describe('Result', () => {
   test(`specifies the result type in its string representation`, () => {
     const success = result('Success!');
@@ -90,7 +107,7 @@ describe('Result', () => {
       const some = Some(10);
 
       const sum = some.toResult()
-        .onSuccess<number>(num => {
+        .onSuccess<number>((num: Maybe<number>) => {
           success(num.value)
           return num.value * 25
         })
@@ -160,5 +177,151 @@ describe('Result', () => {
       expect(() => data.valueUnsafe).toThrowError();
       expect(data.reason.message).toBe('Intentional Error')
     });
+  });
+
+  describe('match', () => {
+    it('should execute success function for successful Result', () => {
+      const success = jest.fn();
+      const failed = jest.fn();
+      const res = Some(10).toResult();
+
+      res.match(success, failed);
+
+      expect(success).toHaveBeenCalledTimes(1);
+      expect(failed).toHaveBeenCalledTimes(0);
+    })
+
+    it('should execute failure function for failed result', () => {
+      const failed = jest.fn();
+      const res = None().toResult();
+
+      expect(res.ok).toBe(false);
+
+      const final = res.match(
+        (num: Maybe<number>) => num.value * 2,
+        failed
+      );
+
+      expect(failed).toHaveBeenCalledTimes(1);
+      expect(final.ok).toBe(true);
+      expect(final.value.isNone).toBe(true);
+    });
+
+    it('should execute the fallback and return successful result with new value', () => {
+      const failed = jest.fn();
+      const res = None().toResult();
+
+      expect(res.ok).toBe(false);
+
+      const final = res.match(
+        (num: Maybe<number>) => num.value * 2,
+        _ => {
+          failed();
+          return 2;
+        } 
+      );
+      
+      expect(failed).toHaveBeenCalledTimes(1);
+      expect(final.ok).toBe(true);
+      expect(final.valueUnsafe).toBe(2);
+    })
+
+    it('should return a failed result when matching asuccessful result throws and exception', () => {
+        const failed = jest.fn();
+        const success = (n: Maybe<number>) => {
+          throw new Error('forced exception');
+        };
+
+        const res = result(10).match(success, failed);
+        expect(res.ok).toBe(false);
+        expect(res.reason.message).toBe('forced exception');
+        expect(failed).toHaveBeenCalledTimes(0);
+    })
+
+    it('should return a failed result when matching a failed result throws and exception', () => {
+      const success = jest.fn();
+      const failed = _ => {
+        throw new Error('forced exception');
+      };
+
+      const res = None().toResult().match(success, failed);
+
+      expect(res.ok).toBe(false);
+      expect(res.reason.message).toBe('forced exception');
+      expect(success).toHaveBeenCalledTimes(0);
+    })
+  });
+
+  describe('matchAsync', () => {
+    it('should execute success function for successful Result', async () => {
+      const success = jest.fn();
+      const failed = jest.fn();
+      const res = Some(10).toResult();
+
+      await res.matchAsync(success, failed);
+
+      expect(success).toHaveBeenCalledTimes(1);
+      expect(failed).toHaveBeenCalledTimes(0);
+    })
+
+    it('should execute failure function for failed result', async () => {
+      const failed = jest.fn();
+      const res = None().toResult();
+
+      expect(res.ok).toBe(false);
+
+      const final = await  res.matchAsync(
+        (num: Maybe<number>) => Promise.resolve(num.value * 2),
+        failed
+      );
+
+      expect(failed).toHaveBeenCalledTimes(1);
+      expect(final.ok).toBe(true);
+      expect(final.value.isNone).toBe(true);
+    });
+
+    it('should execute the fallback and return successful result with new value', async () => {
+      const failed = jest.fn();
+      const res = None().toResult();
+
+      expect(res.ok).toBe(false);
+
+      const final = await res.matchAsync(
+        async (num: Maybe<number>) => num.value * 2,
+        async _ => {
+          failed();
+          return 2;
+        } 
+      );
+      
+      expect(failed).toHaveBeenCalledTimes(1);
+      expect(final.ok).toBe(true);
+      expect(final.valueUnsafe).toBe(2);
+    })
+
+    it('should return a failed result when matching asuccessful result throws and exception', async () => {
+        const failed = jest.fn();
+        const success = (n: Maybe<number>) => {
+          throw new Error('forced exception');
+        };
+
+        const res = await result(10).matchAsync(success, failed);
+        expect(res.ok).toBe(false);
+        expect(res.reason.message).toBe('forced exception');
+        expect(failed).toHaveBeenCalledTimes(0);
+    })
+
+    it('should return a failed result when matching a failed result throws and exception', async () => {
+      const success = jest.fn();
+      const failed = _ => {
+        throw new Error('forced exception');
+      };
+
+      const res = await None().toResult().matchAsync(success, failed);
+
+      expect(res.ok).toBe(false);
+      expect(res.reason.message).toBe('forced exception');
+      expect(success).toHaveBeenCalledTimes(0);
+    })
   });
 });

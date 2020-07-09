@@ -47,7 +47,7 @@ export function Maybe<T>(val: T, defaultValue?: any): Maybe<T> {
     toResult<T>(reason?: string): Result<T>{
       try {
         if (isNone) return Result.Fail<T>(
-          reason || 'None has no value to turn into a successful result.'
+          reason || 'None cannot be turned into a successful result.'
         );
         return Result.Ok<T>(this.value as any);
       } catch(err){
