@@ -62,7 +62,7 @@ if (update.ok) {
 }
 ```
 
-> In this example we're able t ot 
+Here's and exmample on how to apply _perhaps_ around negative cases
 ```js
 const user = None();
 
@@ -79,8 +79,7 @@ const authenticate = addRoles.toResult();
 if (!authenticate.ok)
   console.log('Could not authenticate user', authenticate.reason)
 ```
-```js
-```
+_For more extensive examples, please refer to the [tests](https://example.com)_
 
 ## Why Use This?
 
@@ -107,16 +106,32 @@ A list of commonly used resources that I find helpful are listed in the acknowle
 ## Maybe
 add here some verbage explaining the purpose behind why we want to use maybe and the benefits thath it brings
 
-### <code>Maybe<T>()</code>
+### Maybe\<T\>(T value)
 
-### Some()
+### Some(any value)
 
 ### None()
 
+### .map<T>(fn)
 
-### Result
+### .match(fn, fn)
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+### .toJSON()
+
+
+## Result
+add here some verbage explaining the purpose behind why we want to use maybe and the benefits thath it brings.
+
+### Result<T>()
+
+### result(any value)
+### resultAsync(Promise\<any\>)
+
+### Result.Ok\<T\>(T value)
+### Result.Fail\<T\>(string | Error)
+
+### Success\<T\>(T value)
+### Failure\<T\>(string | Error)
 
 
 
