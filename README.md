@@ -107,44 +107,47 @@ A list of commonly used resources that I find helpful are listed in the acknowle
 add here some verbage explaining the purpose behind why we want to use maybe and the benefits thath it brings
 
 ### Maybe\<T\>(T value)
+#### .hasValue
+#### .isNone
+#### .value
+#### .map<T>(fn)
+#### .match(fn, fn)
+#### .toResult()
 
 ### Some(any value)
 
 ### None()
 
-### .map<T>(fn)
-
-### .match(fn, fn)
-
-### .toJSON()
-
 
 ## Result
 add here some verbage explaining the purpose behind why we want to use maybe and the benefits thath it brings.
 
-### Result<T>()
+### Result\<T\>(ResultStatus status, T value, string | Error)
+#### Result.wrap\<T\>(T value)
 
 ### result(any value)
 ### resultAsync(Promise\<any\>)
+### Success\<T\>(T value)
+### Failure\<T\>(string | Error)
 
 ### Result.Ok\<T\>(T value)
 ### Result.Fail\<T\>(string | Error)
-
-### Success\<T\>(T value)
-### Failure\<T\>(string | Error)
+### Result.wrap\<T\>(T value)
+### Result.wrapAsync\<T\>(T value)
+### Result.match\<T\>(T value)
+### Result.matchAsync\<T\>(T value)
 
 
 
 <!-- ROADMAP -->
-## Roadmap
+# Roadmap
 
 See the [open issues](https://github.com/orgs/yotieapp/projects/1) for a list of proposed features (and known issues).
 
 
 
 <!-- CONTRIBUTING -->
-## Contributing
-
+# Contributing
 1. Fork the Project
 2. Create your Feature Branch (`git checkout -b feat/amazing-feature`)
 3. Commit your Changes (`git commit -m 'Add some amazing-feature'`)
