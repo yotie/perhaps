@@ -1,4 +1,4 @@
-import { Maybe, Some } from './option';
+import { Maybe, Some } from './maybe';
 /**
  * An object that represents the result of an operation that can either return a value successfully
  * or fail. Ty.

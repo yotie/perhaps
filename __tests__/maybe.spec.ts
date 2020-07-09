@@ -1,4 +1,4 @@
-import { Maybe, Some, None } from '../src/option';
+import { Maybe, Some, None } from '../src/maybe';
 import { ResultStatus } from '../src/result';
 
 describe('Maybe', () => {

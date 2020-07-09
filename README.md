@@ -24,7 +24,67 @@
 * [Roadmap](#roadmap)
 * [Contributing](#contributing)
 
+
+<!-- GETTING STARTED -->
+# Getting Started
+
+This is an example of how you may give instructions on setting up your project locally.
+To get a local copy up and running follow these simple example steps.
+
+
+## Installation
+
+
+```sh
+$ yarn add @yotie/perhaps
+```
+
+<!-- USAGE EXAMPLES -->
+## Usage
+
+Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+
+```js
+const user = { name: 'john Doe', age: 21 };
+
+const age = Some(user.age);
+const age2 = age.map(num => num * 2);
+
+if (age2.hasValue) {
+  console.log(`User has a doubled age of ${age2.value}`)
+}
+
+const update = Result.wrapAsync(() =>
+  api.post('/user/1234', { age: age2.value }));
+
+if (update.ok) {
+  console.log('User has be updated: ', update.value.toJSON())
+}
+```
+
+> In this example we're able t ot 
+```js
+const user = None();
+
+const addRoles = user.match(
+  usr => {
+    usr.roles = ['default', 'user:scope'];
+    return usr;
+  },
+  _ => console.warn('No user information is available to display')
+);
+
+const authenticate = addRoles.toResult();
+
+if (!authenticate.ok)
+  console.log('Could not authenticate user', authenticate.reason)
+```
+```js
+```
+
 ## Why Use This?
+
+Because Monads are awesome and dont need to be complicated.
 
 There are many great README templates available on GitHub, however, I didn't find one that really suit my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need.
 
@@ -37,26 +97,24 @@ Of course, no one template will serve all projects since your needs may be diffe
 
 A list of commonly used resources that I find helpful are listed in the acknowledgements.
 
-
-<!-- GETTING STARTED -->
-## Getting Started
-
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
-
-### Installation
-
-
-```sh
-yarn add @yotie/perhaps
-```
+>! Note: Hightlight inspiration from expo result
 
 
 
-<!-- USAGE EXAMPLES -->
-## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+# API
+
+## Maybe
+add here some verbage explaining the purpose behind why we want to use maybe and the benefits thath it brings
+
+### <code>Maybe<T>()</code>
+
+### Some()
+
+### None()
+
+
+### Result
 
 _For more examples, please refer to the [Documentation](https://example.com)_
 

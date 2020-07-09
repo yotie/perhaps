@@ -1,5 +1,5 @@
 import { ResultStatus, asyncResult, result, Result, Failure, Success } from '../src/result';
-import { Some, None, Maybe } from '../src/option';
+import { Some, None, Maybe } from '../src/maybe';
 
 describe(result, () => {
   test(`creates a success result`, () => {
