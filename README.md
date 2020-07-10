@@ -155,6 +155,11 @@ See the [open issues](https://github.com/orgs/yotieapp/projects/1) for a list of
 5. Open a Pull Request
 
 
+# Inspiration
+- expo/results
+- amonad
+
+
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
