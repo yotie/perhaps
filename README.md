@@ -9,7 +9,7 @@
   <h3 align="center">Perhaps 🧐</h3>
 
   <p align="center">
-    An awesome library to handle values and operations
+    An awesome library for handling optional values and operations
   </p>
 </p>
 
@@ -104,7 +104,7 @@ A list of commonly used resources that I find helpful are listed in the acknowle
 # API
 
 ## Maybe
-add here some verbage explaining the purpose behind why we want to use maybe and the benefits thath it brings
+Maybe is a container dedicated for the handling of a data which might be missing. Typically, it is used for representation of optional values. It allows prevent usage of Nullable objects
 
 ### Maybe\<T\>(T value)
 #### .hasValue
@@ -120,7 +120,7 @@ add here some verbage explaining the purpose behind why we want to use maybe and
 
 
 ## Result
-add here some verbage explaining the purpose behind why we want to use maybe and the benefits thath it brings.
+A result object represents the result of an operation that can either return a value successfully or fail. Typically we'd simply either return a value or throw an error, but sometimes we perform multiple operations as a batch, some of which may succeed and others fail. Since we can't simultaneously return values and throw errors, we instead return collections of result objects. This allows a batch operation to return values for successful operations and errors for failed ones without loss of information, namely the errors. (from expo/result)
 
 ### Result\<T\>(ResultStatus status, T value, string | Error)
 #### Result.wrap\<T\>(T value)
