@@ -15,7 +15,21 @@ describe('Maybe', () => {
     expect(m.hasValue).toBe(false);
     expect(m.isNone).toBe(true);
     expect(m.hasValue).toBe(false);
+    expect(m.valueOrDefault(10)).toBe(10);
     expect(() => m.value).toThrow(/Cannot reference value of None./);
+  });
+
+  describe('valueOrDefault', () => {
+    const val = Some('perhaps');
+    const empty = None();
+
+    it('should return the set value and not the default', () => {
+      expect(val.valueOrDefault(25)).toBe('perhaps');
+    })
+    it('should return the default value for a None', () => {
+      expect(empty.isNone).toBe(true);
+      expect(empty.valueOrDefault(25)).toBe(25);
+    })
   });
 
   describe('map()', () => {
