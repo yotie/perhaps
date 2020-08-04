@@ -173,7 +173,7 @@ abstract class Outcome<T> {
 }
 
 export interface ResultHandler {
-  (value?: Maybe<any> | Error): any | Result<any>
+  (value?: Maybe<any> | Error): any | Result<any> | undefined
 };
 
 export interface AsyncResultHandler {
