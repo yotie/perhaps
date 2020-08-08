@@ -1,7 +1,7 @@
 import { ResultStatus, asyncResult, result, Result, Failure, Success } from '../src/result';
 import { Some, None, Maybe } from '../src/maybe';
 
-describe(result, () => {
+describe('result', () => {
   test(`creates a success result`, () => {
     const success = result('Success!');
     expect(success.ok).toBe(true);
@@ -36,7 +36,7 @@ describe(result, () => {
   });
 });
 
-describe(asyncResult, () => {
+describe('asyncResult', () => {
   test(`resolves to a success result if the promise is resolved`, async () => {
     const testResult = await asyncResult(Promise.resolve('Success!'));
     expect(testResult.ok).toBe(true);

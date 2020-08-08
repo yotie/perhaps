@@ -38,7 +38,6 @@ export function result<T>(value?: T | Maybe<T> | Maybe<null> | Error): Result<T>
   if (value instanceof Error) return Result.Fail<T>(value as Error);
   if (value instanceof Maybe) return (value as Maybe<T>).toResult();
   if (value instanceof Result) {
-    console.log('getting result', value.toJSON());
     return value;
   }
 
@@ -145,6 +144,10 @@ abstract class Outcome<T> {
     return this._value.value;
   }
 
+  valueOrDefault(defaultValue: any): T {
+    return this._value.valueOrDefault(defaultValue);
+  }
+
   /**
    * Returns the error that caused this failure, or throws a TypeError if this result actually is a
    * success.
@@ -176,6 +179,10 @@ export interface ResultHandler {
   (value?: Maybe<any> | Error): any | Result<any> | undefined
 };
 
+export interface ErrorResultHandler {
+  (value?: Error): any | Result<any> | undefined
+};
+
 export interface AsyncResultHandler {
   (value?: Maybe<any> | Error): Promise<any> | Promise<Result<any>>
 };
@@ -201,7 +208,7 @@ export class Result<T> extends Outcome<T> {
     }
   }
 
-  onFailure<T>(fn: ResultHandler): Result<T> {
+  onFailure<T>(fn: ErrorResultHandler): Result<T> {
     try {
       //@ts-ignore
       if (this.ok) return this;
@@ -215,7 +222,7 @@ export class Result<T> extends Outcome<T> {
     }
   }
 
-  match<T>(successFn: ResultHandler, failFn: ResultHandler): Result<T> {
+  match<T>(successFn: ResultHandler, failFn: ErrorResultHandler): Result<T> {
     return Result.wrap(() => {
       if (!this.ok) return failFn(this.reason);
 
@@ -223,9 +230,14 @@ export class Result<T> extends Outcome<T> {
     });
   }
 
-  async matchAsync<T>(successFn: ResultHandler, failFn: ResultHandler): Promise<Result<T>> {
-    return Result.wrapAsync(() => {
-      if (!this.ok) return failFn(this.reason);
+  async matchAsync<T>(successFn: ResultHandler, failFn: ErrorResultHandler): Promise<Result<T>> {
+    return Result.wrapAsync(async () => {
+      if (!this.ok) {
+        const res = await failFn(this.reason);
+        if (res instanceof Result) return res;
+      
+        return result<T>(res);
+      }
 
       return successFn(this.value);
     });
