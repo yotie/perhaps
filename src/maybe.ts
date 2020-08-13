@@ -9,7 +9,7 @@ export type Maybe<T> = {
   isNone: Boolean,
   hasValue: Boolean,
   value: T,
-  valueOrDefault(defaultValue: any): T | any,
+  valueOrDefault<T>(defaultValue: any): T | any,
   map<T>(fn: Handler): Maybe<T> | Maybe<null>,
   match(someFn: Handler, noneFn: Handler): Maybe<T>,
   toResult<T>(reason?: string): Result<T>
@@ -34,7 +34,7 @@ export function Maybe<T>(val: T, defaultValue?: any): Maybe<T> {
       return val;
     },
 
-    valueOrDefault(defaultValue: any): T | any {
+    valueOrDefault<T>(defaultValue: any): T | any {
       if (isNone) return defaultValue;
       return val;
     },

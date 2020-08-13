@@ -144,8 +144,8 @@ abstract class Outcome<T> {
     return this._value.value;
   }
 
-  valueOrDefault(defaultValue: any): T {
-    return this._value.valueOrDefault(defaultValue);
+  valueOrDefault<T>(defaultValue: any): T | any {
+    return this._value.valueOrDefault<T>(defaultValue);
   }
 
   /**
