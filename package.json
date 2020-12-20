@@ -20,9 +20,6 @@
     "type": "git",
     "url": "git+https://github.com/yotie/perhaps.git"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
   "author": "Ashley Narcisse",
   "license": "MIT",
   "dependencies": {
