@@ -1,4 +1,4 @@
-name: Publish to Github Private Registry
+name: Publish to NPM
 
 on:
   pull_request:
@@ -20,13 +20,8 @@ jobs:
           node-version: 12
           registry-url: https://npm.pkg.github.com/
           scope: '@yotieapp'
-      - name: Bump version and push tag
-        uses: anothrNick/github-tag-action@1.17.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          WITH_V: false
       - run: yarn
       - run: yarn test --ci
-      - run: npm publish
+      - run: yarn publish --access public
         env:
-          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
